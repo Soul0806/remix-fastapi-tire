@@ -1,13 +1,14 @@
-# fastapi
-
+# import FastAPI
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 
-# db
+# Import SQLAlchemy engine, session tools, and ORM models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from .models import Base, TireBrand
 
+# read CSV
+from .read_allSpecs import spec_list
 from typing import List
 from pydantic import BaseModel
 
@@ -51,6 +52,10 @@ def get_specs():
 @app.get("/api/brand", response_model=List[Brand])
 def get_brands(db: Session = Depends(get_db)):
     return db.query(TireBrand).all()
+
+@app.get("/api/allspecs")
+def read_allSpecs():
+    return spec_list
 
 # def index(request: Request, db: Session = Depends(get_db)):
 #     brands = db.query(TireBrand).all()
